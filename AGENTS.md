@@ -3,7 +3,7 @@
 ## Stack
 
 - TypeScript 7, ESM only, Bun 1.3 for install and scripts
-- Runtime for the published CLI: Node `^22.18.0 || >=24.11.0` (Bun also runs `src/cli.ts`)
+- Published CLI runtime: Node `^22.18.0 || >=24.11.0` (Bun also runs `src/cli.ts`)
 - MCP: `@modelcontextprotocol/server` 2.x
 - Effect 4 (beta) for CLI and HTTP/auth effects
 - Tests: Vitest 4 (`unit` and `integration` projects)
@@ -19,7 +19,8 @@
 - Integration: `bun run test:integration` (needs network for live spec URLs)
 - Typecheck: `bun run typecheck`
 - Build: `bun run build`
-- Pack (runs typecheck, unit tests, build): `bun run pack:dry`
+- Pack check: `bun run check:pack`
+- Pack (typecheck, unit tests, build): `bun run pack:dry`
 - npm web login (2FA in the browser): `bun run login`
 - Publish: `bun run release` (`bun publish --access public --auth-type=web`)
 
@@ -51,17 +52,22 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 ## Layout
 
 - Source: `src/` (`cli.ts` is the bin, `index.ts` is the public library)
-- Tests: `tests/unit`, `tests/integration`
+- Tests: `tests/unit`, `tests/integration`, `tests/fixtures`
 - Generated: `dist/` — do not edit
+- Public consumer skill: `skills/cabrakan/`
+- Local vendored skills: `.agents/skills/` (not the public catalog)
 - Cursor MCP smoke: `.cursor/mcp.json`
 
 ## Project rules
 
 - Keep the package ESM-only. Do not add a CJS build unless a caller requires it.
 - Do not add GitHub Actions. Release is local: `npm pack` / `npm publish`.
-- The npm package and CLI bin name is `cabrakan`. `--version` / `-V` prints `package.json` version. `--server-version` sets the MCP server version string.
+- npm package and CLI bin name is `cabrakan`. `--version` / `-V` prints `package.json` version. `--server-version` sets the MCP server version string.
 - Logs go to stderr. stdout is the MCP protocol (except `--list-tools` and `--version`).
 - Credentials come from flags and `OPENAPI_MCP_*` env vars. Do not log secrets.
+- `README.md` is the human page. Keep its friendly tone and emojis. Do not rewrite it into STE.
+- When you change spec load, tools, auth, or CLI flags, update `README.md` and `skills/cabrakan/references/`.
+- GitHub remote: `DobroslavRadosavljevic/cabrakan`. Do not use the old `sobek` remote.
 
 ## Testing
 
@@ -71,14 +77,14 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 
 ## Git and PRs
 
-- No GitHub CI. Before you pack or publish, run `bun run typecheck`, `bun run test`, and `bun run build`.
-- Ask before: force-push, changing `package.json` `name` / `files` / `exports`, or adding production dependencies.
+- No GitHub CI. Before pack or publish, run `bun run typecheck`, `bun run test`, and `bun run build`.
+- Ask before force-push.
 
 ## Boundaries
 
 - Always: keep `files` limited to `dist` plus changelog; do not pack `.agents/` or tests
-- Ask first: rename the npm package `cabrakan`
-- Never: commit secrets; edit `dist/`; add GitHub workflows for publish
+- Ask first: rename the npm package `cabrakan`; change `package.json` `name` / `files` / `exports`; add production dependencies
+- Never: commit secrets; edit `dist/`; add GitHub workflows for publish; treat `.agents/skills/*` third-party skills as this package’s public skill
 
 ## Docs index
 
@@ -86,6 +92,7 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 | --- | --- |
 | Human setup | `README.md` |
 | Consumer skill | `skills/cabrakan/SKILL.md` |
+| Spec contract | `skills/cabrakan/references/openapi-spec.md` |
 | Release notes | `CHANGELOG.md` |
 | License | `LICENSE` |
 

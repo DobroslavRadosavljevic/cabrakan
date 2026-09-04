@@ -1,27 +1,108 @@
-# cabrakan
+# 🌋 cabrakan
 
-Point this at an OpenAPI file or URL. You get a local **MCP** (Model Context Protocol) server. Each API operation is a tool that hits the real HTTP API.
+**OpenAPI in. MCP tools out.**
+
+Point cabrakan at an OpenAPI file or URL. You get a local **MCP** (Model Context Protocol) server. Each API operation becomes a tool that hits the real HTTP API.
 
 No codegen. No extra config file. Restart when the spec changes.
 
-This is **0.0.1**. APIs can still change.
+> Early **0.0.1** — APIs can still change.
 
-## Features
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%5E22.18%20%7C%7C%20%3E%3D24.11-339933)](package.json)
+[![skills.sh](https://skills.sh/b/DobroslavRadosavljevic/cabrakan)](https://skills.sh/DobroslavRadosavljevic/cabrakan)
 
-- **OpenAPI 3.x and Swagger 2.0** — load JSON or YAML from a path or `http(s)` URL.
-- **One tool per operation** — names come from `operationId`, then `method_path`.
-- **Auth from the spec** — bearer, basic, API keys, OAuth2 client credentials, static OAuth tokens. Empty `security: []` means no auth.
-- **Relative `servers` URLs** — resolved against the spec URL (Petstore-style `/api/v3` works).
-- **Filters** — include/exclude tool names, tags, HTTP methods, path prefixes. Load more than one spec; tool names get a prefix.
-- **Safer writes** — `POST` / `PUT` / `PATCH` / `DELETE` need `confirm: true` unless you pass `--no-confirm`.
-- **Retries and limits** — retry 429/5xx/network, time out, truncate huge bodies.
-- **stdio or HTTP** — stdio for Cursor / Claude. `--transport http` for Streamable HTTP on localhost.
+## 🤖 Agent skill
 
-## OpenAPI spec
+Teach an agent how to install, wire, and run cabrakan ([skills.sh](https://skills.sh/DobroslavRadosavljevic/cabrakan)):
 
-cabrakan loads the document, then makes one MCP tool per HTTP operation. The spec must parse. The spec must also give enough data to build each request.
+```sh
+npx skills add DobroslavRadosavljevic/cabrakan
+```
 
-Check a file or URL:
+## 🚀 Quick start
+
+Needs Node `^22.18` or `>=24.11`. Bun works too.
+
+```sh
+npx -y cabrakan ./openapi.yaml --bearer "$TOKEN"
+npx -y cabrakan ./openapi.yaml --list-tools
+npx -y cabrakan --version
+```
+
+Or install the CLI:
+
+```sh
+npm i -g cabrakan
+cabrakan ./openapi.yaml --bearer "$TOKEN"
+```
+
+Logs go to stderr. stdout stays the MCP protocol (except `--list-tools` and `--version`).
+
+## ✨ What you get
+
+| | |
+| --- | --- |
+| 📄 **OpenAPI 3.x & Swagger 2.0** | JSON or YAML, from a path or `http(s)` URL |
+| 🧰 **One tool per operation** | Names from `operationId`, then `method_path` |
+| 🔐 **Auth from the spec** | Bearer, basic, API keys, OAuth2 client credentials, static tokens. `security: []` means no auth |
+| 🌐 **Relative `servers` URLs** | Resolved against the spec URL (Petstore-style `/api/v3` works) |
+| 🎛️ **Filters** | Include/exclude names, tags, methods, path prefixes. Merge more than one spec |
+| 🛡️ **Safer writes** | `POST` / `PUT` / `PATCH` / `DELETE` need `confirm: true` unless `--no-confirm` |
+| 🔁 **Retries & limits** | Retry 429/5xx/network, time out, truncate huge bodies |
+| 📡 **stdio or HTTP** | stdio for Cursor / Claude. `--transport http` on localhost |
+
+## 🖱️ Cursor
+
+```json
+{
+  "mcpServers": {
+    "my-api": {
+      "command": "npx",
+      "args": ["-y", "cabrakan", "https://api.example.com/openapi.json"],
+      "env": {
+        "OPENAPI_MCP_BEARER": "YOUR_TOKEN"
+      }
+    }
+  }
+}
+```
+
+### HTTP transport
+
+```sh
+cabrakan ./openapi.yaml --transport http --port 3000
+```
+
+Listens on `http://127.0.0.1:3000/mcp`. `/health` returns plain `ok`.
+
+## 🔐 Auth
+
+Credentials come from the spec’s `securitySchemes`. The model does not pass secrets as tool args.
+
+| Scheme | Flag / env |
+| --- | --- |
+| HTTP bearer | `--bearer` / `OPENAPI_MCP_BEARER` |
+| HTTP basic | `--basic user:pass` / `OPENAPI_MCP_BASIC` |
+| `apiKey` (header, query, or cookie) | `--api-key` / `OPENAPI_MCP_API_KEY` |
+| OAuth2 access token | `--oauth-token` or `--bearer` |
+| OAuth2 client credentials | `--oauth-client-id` + `--oauth-client-secret` (+ `--oauth-token-url`) |
+
+OR security: first requirement you can satisfy wins. `-H "Name: value"` always merges onto the request.
+
+## 🎛️ Filters and safety
+
+```sh
+cabrakan ./openapi.yaml --tag pets --exclude-tag admin --method GET
+cabrakan --spec pets.yaml --spec store.yaml
+cabrakan ./openapi.yaml --no-confirm
+```
+
+Repeat `--spec` to merge APIs. Mutating tools wait for `confirm: true` unless you disable that.
+
+## 📄 What the OpenAPI file needs
+
+cabrakan loads the document, then makes one MCP tool per HTTP operation. The spec must parse. It must also give enough data to build each request.
 
 ```sh
 cabrakan ./openapi.yaml --validate-spec
@@ -103,7 +184,7 @@ One requirement can list more than one scheme (AND). More than one requirement i
 
 `mutualTLS` is not supported. Browser OAuth login is not supported.
 
-Do not put secrets in the spec. Pass them as flags or `OPENAPI_MCP_*` env vars. See [Auth](#auth) for flags.
+Do not put secrets in the spec. Pass them as flags or `OPENAPI_MCP_*` env vars.
 
 ### `$ref`
 
@@ -144,107 +225,7 @@ paths:
           description: ok
 ```
 
-## Install
-
-From a local pack:
-
-```sh
-bun run build
-npm pack
-bun add ./cabrakan-0.0.1.tgz
-```
-
-Or run from this repo:
-
-```sh
-bun src/cli.ts ./openapi.yaml
-```
-
-Node `^22.18` or `>=24.11`. Bun works.
-
-## Run
-
-This process **is** the MCP server. Logs go to stderr so stdout stays protocol.
-
-```sh
-cabrakan https://petstore3.swagger.io/api/v3/openapi.json
-cabrakan ./openapi.yaml --bearer "$TOKEN"
-cabrakan ./openapi.yaml --list-tools
-cabrakan --version
-```
-
-### Cursor
-
-```json
-{
-  "mcpServers": {
-    "my-api": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "cabrakan",
-        "https://api.example.com/openapi.json",
-        "--bearer",
-        "YOUR_TOKEN"
-      ]
-    }
-  }
-}
-```
-
-From this repo (dev):
-
-```json
-{
-  "mcpServers": {
-    "petstore": {
-      "command": "bun",
-      "args": [
-        "src/cli.ts",
-        "https://petstore3.swagger.io/api/v3/openapi.json",
-        "--api-key",
-        "special-key",
-        "--bearer",
-        "special-key"
-      ]
-    }
-  }
-}
-```
-
-### HTTP transport
-
-```sh
-cabrakan ./openapi.yaml --transport http --port 3000
-```
-
-Listens on `http://127.0.0.1:3000/mcp` (`/health` is plain `ok`).
-
-## Auth
-
-Credentials are injected from the spec’s `securitySchemes`. The model does not pass secrets as tool args.
-
-| Scheme | Flag / env |
-| --- | --- |
-| HTTP bearer | `--bearer` / `OPENAPI_MCP_BEARER` |
-| HTTP basic | `--basic user:pass` / `OPENAPI_MCP_BASIC` |
-| `apiKey` (header, query, or cookie) | `--api-key` / `OPENAPI_MCP_API_KEY` |
-| OAuth2 access token | `--oauth-token` or `--bearer` |
-| OAuth2 client credentials | `--oauth-client-id` + `--oauth-client-secret` (+ `--oauth-token-url`) |
-
-OR security: first requirement you can satisfy wins. `-H "Name: value"` always merges onto the request.
-
-## Filters and safety
-
-```sh
-cabrakan ./openapi.yaml --tag pets --exclude-tag admin --method GET
-cabrakan --spec pets.yaml --spec store.yaml
-cabrakan ./openapi.yaml --no-confirm
-```
-
-Repeat `--spec` to merge APIs. Mutating tools wait for `confirm: true` unless you disable that.
-
-## Library
+## 📚 Library
 
 ```ts
 import { createOpenApiMcpServer } from "cabrakan";
@@ -261,7 +242,7 @@ serveStdio(() =>
 
 `spec` can be a path, URL, or parsed document. Pass `specs` for more than one. `policy` accepts include/exclude globs, tags, methods, and path prefixes.
 
-## CLI reference
+## 🛠️ CLI reference
 
 ```
 cabrakan <spec> [options]
@@ -286,28 +267,6 @@ cabrakan <spec> [options]
 | `--server-version` | Version string the MCP server reports to clients |
 | `--version, -V` | Print the npm package version and exit |
 
-## Local publish
-
-There is no GitHub CI. You publish from this machine with Bun. npm 2FA uses the browser.
-
-1. `bun install`
-2. One-time: `bun run login` (opens npm web login; complete 2FA in the browser)
-3. Check the account: `bun pm whoami`
-4. Dry run: `bun run pack:dry`
-5. Publish: `bun run release`
-
-`prepack` already runs typecheck, unit tests, and build before the tarball is written. `bun publish` uses `--auth-type=web` so npm can open the 2FA page if the registry asks for it. Do not name a script `publish`; npm/Bun treat that as a post-publish hook.
-
-## Agent skill
-
-This repo ships an [Agent Skill](https://agentskills.io/specification) at `skills/cabrakan/`. After the GitHub repo is public, install it with:
-
-```sh
-npx skills add DobroslavRadosavljevic/cabrakan
-```
-
-[skills.sh](https://skills.sh/) indexes public GitHub repos that contain a valid `SKILL.md` (`name` + `description`) under `skills/` or `.agents/skills/`. The public skill lives in `skills/cabrakan/`. Other folders under `.agents/skills/` are local third-party skills. Move or omit those before you want a clean listing.
-
-## License
+## ⚖️ License
 
 MIT
