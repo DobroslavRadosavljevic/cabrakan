@@ -59,7 +59,7 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 
 - Keep the package ESM-only. Do not add a CJS build unless a caller requires it.
 - Do not add GitHub Actions. Release is local: `npm pack` / `npm publish`.
-- The npm package and CLI bin name is `sobek`. `--version` / `-V` prints `package.json` version. `--server-version` sets the MCP server version string.
+- The npm package and CLI bin name is `cabrakan`. `--version` / `-V` prints `package.json` version. `--server-version` sets the MCP server version string.
 - Logs go to stderr. stdout is the MCP protocol (except `--list-tools` and `--version`).
 - Credentials come from flags and `OPENAPI_MCP_*` env vars. Do not log secrets.
 
@@ -77,7 +77,7 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 ## Boundaries
 
 - Always: keep `files` limited to `dist` plus changelog; do not pack `.agents/` or tests
-- Ask first: rename the npm package `sobek`
+- Ask first: rename the npm package `cabrakan`
 - Never: commit secrets; edit `dist/`; add GitHub workflows for publish
 
 ## Docs index

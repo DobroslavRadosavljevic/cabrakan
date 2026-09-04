@@ -45,7 +45,7 @@ export async function createOpenApiMcpServer(options: CreateOpenApiMcpServerOpti
 
   const title = loaded.map((entry) => entry.document.info?.title).filter(Boolean).join(" + ");
   const server = new McpServer({
-    name: options.name ?? slugName(title || "sobek"),
+    name: options.name ?? slugName(title || "cabrakan"),
     version: options.version ?? loaded[0]?.document.info?.version ?? readPackageVersion(),
   });
 
@@ -89,6 +89,6 @@ export function slugName(title: string): string {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "")
-      .slice(0, 64) || "sobek"
+      .slice(0, 64) || "cabrakan"
   );
 }

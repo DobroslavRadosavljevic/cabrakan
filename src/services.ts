@@ -11,7 +11,7 @@ export class SpecHttp extends Context.Service<
   {
     readonly fetch: FetchLike;
   }
->()("sobek/SpecHttp") {
+>()("cabrakan/SpecHttp") {
   static layer = (fetchFn: FetchLike = globalThis.fetch) => Layer.succeed(this, { fetch: fetchFn });
 }
 
@@ -20,7 +20,7 @@ export class ApiHttp extends Context.Service<
   {
     readonly fetch: FetchLike;
   }
->()("sobek/ApiHttp") {
+>()("cabrakan/ApiHttp") {
   static layer = (fetchFn: FetchLike = globalThis.fetch) => Layer.succeed(this, { fetch: fetchFn });
 }
 
@@ -31,7 +31,7 @@ export class TokenCache extends Context.Service<
     readonly set: (key: string, value: CachedToken) => Effect.Effect<void>;
     readonly clear: Effect.Effect<void>;
   }
->()("sobek/TokenCache", {
+>()("cabrakan/TokenCache", {
   make: Effect.gen(function* () {
     const ref = yield* Ref.make(new Map<string, CachedToken>());
     return {

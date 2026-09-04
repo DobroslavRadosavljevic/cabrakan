@@ -1,5 +1,5 @@
 {
-  "name": "sobek",
+  "name": "cabrakan",
   "version": "0.0.1",
   "description": "Turn an OpenAPI document into a local MCP server.",
   "type": "module",
@@ -21,7 +21,7 @@
     "CHANGELOG.md"
   ],
   "bin": {
-    "sobek": "./dist/cli.mjs"
+    "cabrakan": "./dist/cli.mjs"
   },
   "types": "./dist/index.d.mts",
   "exports": {

@@ -1,4 +1,4 @@
-# sobek
+# cabrakan
 
 Point this at an OpenAPI file or URL. You get a local **MCP** (Model Context Protocol) server. Each API operation is a tool that hits the real HTTP API.
 
@@ -24,7 +24,7 @@ From a local pack:
 ```sh
 bun run build
 npm pack
-bun add ./sobek-0.0.1.tgz
+bun add ./cabrakan-0.0.1.tgz
 ```
 
 Or run from this repo:
@@ -40,10 +40,10 @@ Node `^22.18` or `>=24.11`. Bun works.
 This process **is** the MCP server. Logs go to stderr so stdout stays protocol.
 
 ```sh
-sobek https://petstore3.swagger.io/api/v3/openapi.json
-sobek ./openapi.yaml --bearer "$TOKEN"
-sobek ./openapi.yaml --list-tools
-sobek --version
+cabrakan https://petstore3.swagger.io/api/v3/openapi.json
+cabrakan ./openapi.yaml --bearer "$TOKEN"
+cabrakan ./openapi.yaml --list-tools
+cabrakan --version
 ```
 
 ### Cursor
@@ -55,7 +55,7 @@ sobek --version
       "command": "npx",
       "args": [
         "-y",
-        "sobek",
+        "cabrakan",
         "https://api.example.com/openapi.json",
         "--bearer",
         "YOUR_TOKEN"
@@ -88,7 +88,7 @@ From this repo (dev):
 ### HTTP transport
 
 ```sh
-sobek ./openapi.yaml --transport http --port 3000
+cabrakan ./openapi.yaml --transport http --port 3000
 ```
 
 Listens on `http://127.0.0.1:3000/mcp` (`/health` is plain `ok`).
@@ -110,9 +110,9 @@ OR security: first requirement you can satisfy wins. `-H "Name: value"` always m
 ## Filters and safety
 
 ```sh
-sobek ./openapi.yaml --tag pets --exclude-tag admin --method GET
-sobek --spec pets.yaml --spec store.yaml
-sobek ./openapi.yaml --no-confirm
+cabrakan ./openapi.yaml --tag pets --exclude-tag admin --method GET
+cabrakan --spec pets.yaml --spec store.yaml
+cabrakan ./openapi.yaml --no-confirm
 ```
 
 Repeat `--spec` to merge APIs. Mutating tools wait for `confirm: true` unless you disable that.
@@ -120,7 +120,7 @@ Repeat `--spec` to merge APIs. Mutating tools wait for `confirm: true` unless yo
 ## Library
 
 ```ts
-import { createOpenApiMcpServer } from "sobek";
+import { createOpenApiMcpServer } from "cabrakan";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 
 serveStdio(() =>
@@ -137,7 +137,7 @@ serveStdio(() =>
 ## CLI reference
 
 ```
-sobek <spec> [options]
+cabrakan <spec> [options]
 ```
 
 | Option | What it does |

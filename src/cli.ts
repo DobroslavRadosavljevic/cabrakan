@@ -39,7 +39,7 @@ const program = Effect.gen(function* () {
   ).pipe(Effect.map((groups) => groups.flat()));
 
   if (parsed.validateSpec) {
-    process.stderr.write(`sobek: ${tools.length} tools from ${parsed.specs.length} spec(s)\n`);
+    process.stderr.write(`cabrakan: ${tools.length} tools from ${parsed.specs.length} spec(s)\n`);
     process.exit(0);
   }
   if (parsed.listTools) {
@@ -66,7 +66,7 @@ const program = Effect.gen(function* () {
 
   if (parsed.transport === "http") {
     process.stderr.write(
-      `sobek: ${documents.map((document) => document.info?.title ?? "API").join(", ")} (${tools.length} tools)\n`,
+      `cabrakan: ${documents.map((document) => document.info?.title ?? "API").join(", ")} (${tools.length} tools)\n`,
     );
     yield* serveMcpHttpEffect({
       createServer,
@@ -77,11 +77,11 @@ const program = Effect.gen(function* () {
   }
 
   process.stderr.write(
-    `sobek: ${documents[0]?.info?.title ?? parsed.spec} (${tools.length} tools) on stdio\n`,
+    `cabrakan: ${documents[0]?.info?.title ?? parsed.spec} (${tools.length} tools) on stdio\n`,
   );
   serveStdio(() => createServer(), {
     onerror: (error) => {
-      process.stderr.write(`sobek: ${error.message}\n`);
+      process.stderr.write(`cabrakan: ${error.message}\n`);
     },
   });
 });

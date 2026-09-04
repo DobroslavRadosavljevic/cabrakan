@@ -182,7 +182,7 @@ export function parseCli(argv: string[]): CliOptions | { help: true } | { showVe
   };
 }
 
-export const CLI_HELP = `Usage: sobek <spec> [options]
+export const CLI_HELP = `Usage: cabrakan <spec> [options]
 
 Start an MCP server from an OpenAPI 3.x or Swagger 2.0 file/URL.
 Default transport is stdio. Use --transport http for Streamable HTTP.

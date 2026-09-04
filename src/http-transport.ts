@@ -44,7 +44,7 @@ export const serveMcpHttpEffect = (options: ServeMcpHttpOptions): Effect.Effect<
             return transport.handleRequest(request);
           },
         });
-        process.stderr.write(`sobek: streamable HTTP on http://${hostname}:${port}${path}\n`);
+        process.stderr.write(`cabrakan: streamable HTTP on http://${hostname}:${port}${path}\n`);
         await new Promise<void>((resolve) => {
           const shutdown = () => {
             void server.stop();
