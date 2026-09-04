@@ -19,7 +19,9 @@
 - Integration: `bun run test:integration` (needs network for live spec URLs)
 - Typecheck: `bun run typecheck`
 - Build: `bun run build`
-- Pack (runs typecheck, unit tests, build): `npm pack`
+- Pack (runs typecheck, unit tests, build): `bun run pack:dry`
+- npm web login (2FA in the browser): `bun run login`
+- Publish: `bun run release` (`bun publish --access public --auth-type=web`)
 
 ## Communication (ASD-STE100)
 

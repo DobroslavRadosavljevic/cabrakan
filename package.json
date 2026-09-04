@@ -49,8 +49,10 @@
     "test:watch": "vitest --project unit",
     "test:integration": "vitest run --project integration --passWithNoTests",
     "prepack": "bun run typecheck && bun run test && bun run build",
-    "pack:dry": "npm pack --dry-run",
-    "check:pack": "publint"
+    "pack:dry": "bun publish --dry-run --access public",
+    "check:pack": "publint",
+    "login": "npm login --auth-type=web",
+    "release": "bun publish --access public --auth-type=web"
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.1.0",

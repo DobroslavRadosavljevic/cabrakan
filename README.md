@@ -161,16 +161,15 @@ sobek <spec> [options]
 
 ## Local publish
 
-There is no GitHub CI. You pack and publish from this machine.
+There is no GitHub CI. You publish from this machine with Bun. npm 2FA uses the browser.
 
 1. `bun install`
-2. `bun run typecheck && bun run test && bun run build`
-3. Optional live check: `bun run test:integration`
-4. `npm pack --dry-run` then `npm pack`
-5. Smoke the tarball: `node dist/cli.mjs --version` (must print `0.0.1`)
-6. If you publish to npm: `npm login` then `npm publish`
+2. One-time: `bun run login` (opens npm web login; complete 2FA in the browser)
+3. Check the account: `bun pm whoami`
+4. Dry run: `bun run pack:dry`
+5. Publish: `bun run release`
 
-`prepack` already runs typecheck, unit tests, and build when you `npm pack` or `npm publish`.
+`prepack` already runs typecheck, unit tests, and build before the tarball is written. `bun publish` uses `--auth-type=web` so npm can open the 2FA page if the registry asks for it. Do not name a script `publish`; npm/Bun treat that as a post-publish hook.
 
 ## License
 
