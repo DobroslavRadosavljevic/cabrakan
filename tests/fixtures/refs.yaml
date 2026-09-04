@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: Refs
+  version: 1.0.0
+servers:
+  - url: https://refs.example
+paths:
+  /items/{itemId}:
+    get:
+      operationId: getItem
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+components:
+  parameters:
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string

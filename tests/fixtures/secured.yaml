@@ -1,0 +1,130 @@
+openapi: 3.1.0
+info:
+  title: Secured Pets
+  version: 1.0.0
+servers:
+  - url: https://{env}.pets.example/{base}
+    variables:
+      env:
+        default: api
+      base:
+        default: v1
+paths:
+  /pets/{petId}:
+    parameters:
+      - name: petId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tags
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: filter
+        in: query
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      - name: session
+        in: cookie
+        schema:
+          type: string
+    get:
+      operationId: getPet
+      security:
+        - petstore_auth: []
+      responses:
+        "200":
+          description: ok
+    post:
+      operationId: updatePet
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: ok
+  /login:
+    post:
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                pass:
+                  type: string
+      responses:
+        "200":
+          description: ok
+  /admin:
+    get:
+      operationId: adminPing
+      security:
+        - basic_auth: []
+        - bearer_auth: []
+      responses:
+        "200":
+          description: ok
+  /oauth-only:
+    get:
+      operationId: oauthPing
+      security:
+        - oauth: []
+      responses:
+        "200":
+          description: ok
+  /oidc:
+    get:
+      operationId: oidcPing
+      security:
+        - oidc: []
+      responses:
+        "200":
+          description: ok
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    petstore_auth:
+      type: http
+      scheme: bearer
+    basic_auth:
+      type: http
+      scheme: basic
+    bearer_auth:
+      type: http
+      scheme: bearer
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.pets.example/oauth/token
+          scopes:
+            pets: read pets
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.pets.example/.well-known/openid-configuration

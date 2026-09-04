@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "types": ["bun"],
+    "rootDir": "."
+  },
+  "include": [
+    "src",
+    "tests",
+    "tsdown.config.ts",
+    "vitest.config.ts",
+    "vitest.unit.config.ts",
+    "vitest.integration.config.ts"
+  ]
+}

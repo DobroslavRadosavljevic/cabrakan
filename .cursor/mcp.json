@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "openapi-petstore": {
+      "command": "bun",
+      "args": [
+        "src/cli.ts",
+        "https://petstore3.swagger.io/api/v3/openapi.json",
+        "--api-key",
+        "special-key",
+        "--bearer",
+        "special-key"
+      ],
+      "env": {
+        "OPENAPI_MCP_API_KEY": "special-key",
+        "OPENAPI_MCP_BEARER": "special-key"
+      }
+    }
+  }
+}
