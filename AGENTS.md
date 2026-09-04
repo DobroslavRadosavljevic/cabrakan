@@ -85,6 +85,7 @@ Hard rule for all agent text to humans. Also covers names in the codebase. Do no
 | Topic | Document |
 | --- | --- |
 | Human setup | `README.md` |
+| Consumer skill | `skills/cabrakan/SKILL.md` |
 | Release notes | `CHANGELOG.md` |
 | License | `LICENSE` |
 

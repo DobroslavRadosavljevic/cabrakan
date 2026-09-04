@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "my-api": {
+      "command": "npx",
+      "args": ["-y", "cabrakan", "https://api.example.com/openapi.json"],
+      "env": {
+        "OPENAPI_MCP_BEARER": "YOUR_TOKEN"
+      }
+    }
+  }
+}
